@@ -27,6 +27,7 @@ export default function Footer() {
           <h2>Train</h2>
           <ul>
             <li><Link to="/programs">Programs</Link></li>
+            <li><Link to="/exercises">Exercise library</Link></li>
             <li><Link to="/trainers">Trainers</Link></li>
             <li><Link to="/schedule">Schedule</Link></li>
             <li><Link to="/membership">Membership</Link></li>

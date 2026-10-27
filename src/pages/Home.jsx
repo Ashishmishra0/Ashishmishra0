@@ -4,6 +4,7 @@ import Scene from "../components/Scene.jsx";
 import Stat from "../components/Stat.jsx";
 import CtaBand from "../components/CtaBand.jsx";
 import { useReveal, useTitle } from "../hooks.js";
+import { GROUPS, titleCase } from "../data/exercises.js";
 
 const LOAD_LABELS = {
   light: "Light plates on the bar.",
@@ -154,6 +155,27 @@ export default function Home() {
                 <p>{text}</p>
                 <Link className="text-link" to={`/programs#${anchor}`}>View {title}</Link>
               </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section" style={{ paddingTop: 0 }}>
+        <div className="wrap">
+          <div className="section-head">
+            <div>
+              <p className="kicker">Exercise library</p>
+              <h2>Every lift, by muscle.</h2>
+            </div>
+            <Link className="text-link" to="/exercises">Open the library</Link>
+          </div>
+          <div className="muscle-grid">
+            {GROUPS.filter((group) => group.id !== "neck").map((group, index) => (
+              <Link className="muscle-tile reveal" to={`/exercises?group=${group.id}`} key={group.id}>
+                <span className="muscle-no">0{index + 1}</span>
+                <span className="muscle-name">{group.label}</span>
+                <span className="muscle-list">{group.muscles.map(titleCase).join(" · ")}</span>
+              </Link>
             ))}
           </div>
         </div>

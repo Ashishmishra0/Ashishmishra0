@@ -13,7 +13,16 @@ Front end only. There is no server or database; the contact form validates in th
 
 ## Pages
 
-Home, About, Programs, Trainers, Membership, Schedule, Contact.
+Home, About, Programs, Exercises, Trainers, Membership, Schedule, Contact.
+
+## Exercise library
+
+The Exercises pages pull from [Free Exercise DB](https://github.com/yuhonas/free-exercise-db), an open public-domain dataset (Unlicense) of 870+ exercises with start/finish photos, target muscles, equipment, level, and step-by-step instructions. The JSON and images are loaded at runtime from the jsDelivr CDN (`src/data/exercises.js`), so there is nothing to host or key to manage.
+
+- `/#/exercises` — browse by muscle group (chest, back, shoulders, arms, legs, core), filter by equipment and level, search by name or muscle. Filters live in the URL, so a view can be linked to, e.g. `/#/exercises?group=chest&equipment=barbell`.
+- `/#/exercises/:id` — one exercise: animated start/finish photos, muscles, facts, numbered instructions, and related lifts.
+
+If you would rather not depend on the CDN, copy `dist/exercises.json` and the `exercises/` image folders from that repo into `public/` and point `BASE` in `src/data/exercises.js` at them.
 
 ## Run it
 
