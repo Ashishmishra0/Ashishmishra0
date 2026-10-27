@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import Logo from "./Logo.jsx";
+import { Barbell, Plate } from "./Marks.jsx";
 
 const links = [
   ["/about", "About"],
@@ -14,15 +15,7 @@ const links = [
 
 export default function Header() {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const { pathname } = useLocation();
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     setOpen(false);
@@ -42,34 +35,43 @@ export default function Header() {
   const ctaLabel = pathname === "/membership" ? "Book" : "Join";
 
   return (
-    <header className={`site-header${scrolled ? " is-scrolled" : ""}`}>
-      <div className="wrap nav-bar">
+    <>
+      <header className="dock">
         <Logo />
-        <button
-          type="button"
-          className={`nav-toggle${open ? " is-open" : ""}`}
-          aria-expanded={open}
-          aria-controls="site-nav"
-          onClick={() => setOpen((value) => !value)}
-        >
-          <span className="sr-only">Menu</span>
+        <p className="dock-status">
           <i></i>
-          <i></i>
-        </button>
-        <nav className={`nav${open ? " is-open" : ""}`} id="site-nav" aria-label="Primary">
-          {links.map(([to, label]) => (
-            <NavLink key={to} to={to} onClick={() => setOpen(false)}>
-              {label}
-            </NavLink>
-          ))}
-          <Link className="nav-join btn btn-primary" to="/membership" onClick={() => setOpen(false)}>
-            Join the club
+          Floor open · 05:00
+        </p>
+        <div className="dock-actions">
+          <button
+            type="button"
+            className={`nav-toggle${open ? " is-open" : ""}`}
+            aria-expanded={open}
+            aria-controls="site-nav"
+            onClick={() => setOpen((value) => !value)}
+          >
+            <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
+            <span aria-hidden="true">{open ? "Close" : "Menu"}</span>
+          </button>
+          <Link className="btn btn-primary nav-cta" to={ctaTo}>
+            {ctaLabel}
           </Link>
-        </nav>
-        <Link className="btn btn-primary nav-cta" to={ctaTo}>
-          {ctaLabel}
+        </div>
+      </header>
+      <nav className={`nav${open ? " is-open" : ""}`} id="site-nav" aria-label="Primary">
+        <div className="nav-gear" aria-hidden="true">
+          <Plate weight="20" />
+          <Barbell />
+        </div>
+        {links.map(([to, label]) => (
+          <NavLink key={to} to={to} onClick={() => setOpen(false)}>
+            {label}
+          </NavLink>
+        ))}
+        <Link className="nav-join btn btn-primary" to="/membership" onClick={() => setOpen(false)}>
+          Join the club
         </Link>
-      </div>
-    </header>
+      </nav>
+    </>
   );
 }

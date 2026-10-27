@@ -1,6 +1,6 @@
 # Anni Fitness
 
-Multi-page website for Anni Fitness, a strength and conditioning club, built with React. Dark athletic layout, poster type, and interactive 3D pieces rendered with Three.js: a barbell you can load, a three-ring mark, and a kettlebell you can swing.
+Multi-page website for Anni Fitness, a strength and conditioning club, built with React. Poster layout inspired by a bold bar site: color stripes, a floating menu instead of a link bar, diagonal marquees, and moving gym graphics (barbell, dumbbell, kettlebell, plate, rope, med ball) plus interactive Three.js pieces — a barbell you can load, a three-ring mark, and a kettlebell you can swing.
 
 Front end only. There is no server or database; the contact form validates in the browser and keeps nothing.
 
@@ -48,7 +48,7 @@ index.html              Vite entry
 src/main.jsx            Mounts the app
 src/App.jsx             Routes, header, footer
 src/pages/              One component per page
-src/components/         Header, Footer, Scene, Stat, TiltCard, CtaBand, Logo, ExerciseCard
+src/components/         Header, Footer, Scene, Stat, TiltCard, CtaBand, Logo, Marks, ExerciseCard
 src/data/exercises.js   Free Exercise DB loader, muscle groups, image URLs
 src/three/createScene.js  Three.js scenes (barbell, mark, kettlebell)
 src/hooks.js            Title, reveal-on-scroll, count-up
