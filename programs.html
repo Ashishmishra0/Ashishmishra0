@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Programs — Anni Fitness</title>
+  <meta name="description" content="Anni Fitness programs: Iron strength, Engine conditioning, Ringcraft boxing, Yard mixed sessions, Reset mobility, and private coaching." />
+  <meta name="theme-color" content="#070708" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@100..900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap nav-bar">
+      <a class="logo" href="index.html">
+        <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <rect x="1.2" y="1.2" width="29.6" height="29.6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M8.5 24.5 16 7.5 23.5 24.5" fill="none" stroke="#d6ff3f" stroke-width="2"/>
+          <path d="M11.2 18.6h9.6" stroke="#d6ff3f" stroke-width="2"/>
+        </svg>
+        <span class="logo-type">Anni <em>Fitness</em></span>
+      </a>
+      <input class="nav-check" type="checkbox" id="nav-check" />
+      <label class="nav-toggle" for="nav-check"><span class="sr-only">Menu</span><i></i><i></i></label>
+      <nav class="nav" id="site-nav" aria-label="Primary">
+        <a href="about.html">About</a>
+        <a href="programs.html" aria-current="page">Programs</a>
+        <a href="trainers.html">Trainers</a>
+        <a href="membership.html">Membership</a>
+        <a href="schedule.html">Schedule</a>
+        <a href="contact.html">Contact</a>
+        <a class="nav-join btn btn-lime" href="membership.html">Join the club</a>
+      </nav>
+      <a class="btn btn-lime nav-cta" href="membership.html">Join</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-hero">
+      <p class="watermark" aria-hidden="true">TRAIN</p>
+      <div class="wrap page-hero-grid">
+        <div>
+          <p class="kicker">Programs</p>
+          <h1>Six lanes. One standard.</h1>
+          <p class="copy lede">Every class has a coach, a clock, and a way to scale. Mix the week or stay in one lane until the block is done.</p>
+          <div class="hero-actions" style="margin-top: 1.3rem">
+            <a class="btn btn-lime" href="schedule.html">This week’s board</a>
+            <a class="btn btn-ghost" href="membership.html">Membership</a>
+          </div>
+        </div>
+        <div class="stage-block">
+          <div class="stage">
+            <div class="stage-frame" aria-hidden="true"></div>
+            <canvas data-scene="kettlebell" tabindex="0" aria-label="Interactive 3D kettlebell. Drag or use arrow keys to rotate. The swing button plays one rep."></canvas>
+            <div class="fallback" aria-hidden="true"><div class="fallback-bell"></div></div>
+            <p class="stage-hint">Drag to turn</p>
+          </div>
+          <div class="stage-controls">
+            <button type="button" class="btn btn-ghost" data-swing>Swing the bell</button>
+            <p class="stage-note">One rep. Then set it down.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: 1rem">
+      <div class="wrap">
+        <article class="program" id="iron">
+          <p class="program-index">01</p>
+          <div>
+            <h2>Iron</h2>
+            <p class="meta">60 min · Strength · Platforms</p>
+            <p class="copy">Barbell strength for people who want the big lifts to look the same on rep five as they did on rep one. Squat, hinge, push, and pull rotate through the block.</p>
+            <ul>
+              <li>Loads posted as ranges, not a single heroic number</li>
+              <li>Technique notes written on the board before the clock starts</li>
+              <li>A fundamentals option in the late morning for newer lifters</li>
+            </ul>
+          </div>
+        </article>
+        <article class="program" id="engine">
+          <p class="program-index">02</p>
+          <div>
+            <h2>Engine</h2>
+            <p class="meta">30–45 min · Conditioning · Deck</p>
+            <p class="copy">Intervals with a purpose: repeatable pieces that build a bigger engine and still leave your strength work intact.</p>
+            <ul>
+              <li>Rower, ski, sled, and carry stations with a coach on the transitions</li>
+              <li>Short Engine 30 at dawn, longer pieces in the evening</li>
+              <li>Pacing targets so the first round is not the whole session</li>
+            </ul>
+          </div>
+        </article>
+        <article class="program" id="ringcraft">
+          <p class="program-index">03</p>
+          <div>
+            <h2>Ringcraft</h2>
+            <p class="meta">50 min · Boxing · Ring</p>
+            <p class="copy">Guard, feet, and bag rounds. The class teaches the skill, then lets the sweat catch up. No sparring in the group hour.</p>
+            <ul>
+              <li>Gloves and wraps are available at the desk</li>
+              <li>Partner drills stay technical — power is optional</li>
+              <li>Open skill slots for members who want extra rounds</li>
+            </ul>
+          </div>
+        </article>
+        <article class="program" id="yard">
+          <p class="program-index">04</p>
+          <div>
+            <h2>Yard</h2>
+            <p class="meta">55 min · Mixed · Deck</p>
+            <p class="copy">A coached mixed session for people training toward a race, a test, or just a harder Saturday. Stations rotate. The plan does not.</p>
+            <ul>
+              <li>Run, carry, sled, and a strength piece in one hour</li>
+              <li>Scaled distances posted beside the full effort</li>
+              <li>Built to sit next to Iron, not replace it</li>
+            </ul>
+          </div>
+        </article>
+        <article class="program" id="reset">
+          <p class="program-index">05</p>
+          <div>
+            <h2>Reset</h2>
+            <p class="meta">40 min · Mobility · Quiet bay</p>
+            <p class="copy">Hips, shoulders, breath, and positions you actually use under a bar. This is training, not a cooldown you skip.</p>
+            <ul>
+              <li>Low lights, no leaderboard</li>
+              <li>Useful if you lift heavy or sit all day</li>
+              <li>Members on Elite can book the bay outside class</li>
+            </ul>
+          </div>
+        </article>
+        <article class="program" id="private">
+          <p class="program-index">06</p>
+          <div>
+            <h2>Private</h2>
+            <p class="meta">50 min · One to one · Any room</p>
+            <p class="copy">Coaching for a specific lift, a return from time off, or a block you want watched closely. Elite membership includes two sessions a month.</p>
+            <ul>
+              <li>Booked with a named coach</li>
+              <li>Plan written down so the next class matches it</li>
+              <li>Not a sales hour — you train</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="cta-band">
+      <div class="wrap cta-inner">
+        <div>
+          <p class="kicker">Not sure where to start</p>
+          <h2>The intro puts you in the right lane.</h2>
+        </div>
+        <a class="btn btn-lime" href="contact.html">Book an intro</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div class="footer-brand">
+        <a class="logo" href="index.html">
+          <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true">
+            <rect x="1.2" y="1.2" width="29.6" height="29.6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+            <path d="M8.5 24.5 16 7.5 23.5 24.5" fill="none" stroke="#d6ff3f" stroke-width="2"/>
+            <path d="M11.2 18.6h9.6" stroke="#d6ff3f" stroke-width="2"/>
+          </svg>
+          <span class="logo-type">Anni <em>Fitness</em></span>
+        </a>
+        <p>A modern training club for strength, conditioning, boxing, and recovery.</p>
+      </div>
+      <div>
+        <h2>Visit</h2>
+        <p>18 North Yard<br />Studio level<br />Mon–Fri 5:00–22:00<br />Sat 7:00–18:00<br />Sun 8:00–14:00</p>
+      </div>
+      <div>
+        <h2>Train</h2>
+        <ul>
+          <li><a href="programs.html">Programs</a></li>
+          <li><a href="trainers.html">Trainers</a></li>
+          <li><a href="schedule.html">Schedule</a></li>
+          <li><a href="membership.html">Membership</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Desk</h2>
+        <p><a href="mailto:hello@annifitness.example">hello@annifitness.example</a></p>
+        <p style="margin: 0.8rem 0 1rem">Intro sessions are booked from the desk, not at the turnstile.</p>
+        <a class="btn btn-lime" href="contact.html">Book an intro</a>
+      </div>
+    </div>
+    <div class="wrap footer-base">
+      <p>© <span data-year>2026</span> Anni Fitness</p>
+      <p>Train with intent.</p>
+    </div>
+  </footer>
+  <script type="module" src="js/scene.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
