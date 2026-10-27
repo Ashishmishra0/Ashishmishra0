@@ -80,7 +80,7 @@ export default function Home() {
               Anni Fitness is a sharp, modern club for people who want the room to feel serious and the coaching to feel personal. Strength, engine work, boxing, and recovery — one standard, three rooms.
             </p>
             <div className="hero-actions">
-              <Link className="btn btn-lime" to="/membership">Start a membership</Link>
+              <Link className="btn btn-primary" to="/membership">Start a membership</Link>
               <Link className="btn btn-ghost" to="/schedule">See the schedule</Link>
             </div>
             <ul className="hero-meta">

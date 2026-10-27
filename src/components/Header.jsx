@@ -62,11 +62,11 @@ export default function Header() {
               {label}
             </NavLink>
           ))}
-          <Link className="nav-join btn btn-lime" to="/membership" onClick={() => setOpen(false)}>
+          <Link className="nav-join btn btn-primary" to="/membership" onClick={() => setOpen(false)}>
             Join the club
           </Link>
         </nav>
-        <Link className="btn btn-lime nav-cta" to={ctaTo}>
+        <Link className="btn btn-primary nav-cta" to={ctaTo}>
           {ctaLabel}
         </Link>
       </div>

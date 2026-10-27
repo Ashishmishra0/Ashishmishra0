@@ -32,13 +32,13 @@ function shadowTexture() {
 function studioEnvironment(renderer) {
   const pmrem = new THREE.PMREMGenerator(renderer);
   const room = new THREE.Scene();
-  room.background = new THREE.Color(0x14161a);
+  room.background = new THREE.Color(0x1a1714);
   const glow = new THREE.SphereGeometry(0.6, 16, 16);
   [
     [0xfff7ea, 6, 4, 4],
-    [0xd6ff3f, -6, 2, -3],
+    [0xff4f1f, -6, 2, -3],
     [0xff4d1c, 3, -3, 5],
-    [0x9eb6ff, -3, 5, -6],
+    [0x7fc7bf, -3, 5, -6],
   ].forEach(([color, x, y, z]) => {
     const bulb = new THREE.Mesh(glow, new THREE.MeshBasicMaterial({ color }));
     bulb.position.set(x, y, z);
@@ -53,7 +53,7 @@ function buildDumbbell(root) {
   const iron = metal(0x16171b, 0.32, 0.94);
   const steel = metal(0xd7dde6, 0.16, 1);
   const gripMat = metal(0x2c2e33, 0.75, 0.28);
-  const lime = metal(0xd6ff3f, 0.28, 0.45, 0x6d8018, 0.45);
+  const accent = metal(0xff4f1f, 0.28, 0.45, 0x7a1e06, 0.45);
   const plates = [];
 
   const bar = new THREE.Mesh(new THREE.CylinderGeometry(0.072, 0.072, 3.35, 40), steel);
@@ -91,7 +91,7 @@ function buildDumbbell(root) {
       root.add(plate);
       plates.push(plate);
 
-      const edge = new THREE.Mesh(new THREE.TorusGeometry(spec.radius, 0.012, 10, 64), lime);
+      const edge = new THREE.Mesh(new THREE.TorusGeometry(spec.radius, 0.012, 10, 64), accent);
       edge.rotation.y = Math.PI / 2;
       edge.position.x = side * (spec.x + spec.thickness * 0.52);
       edge.userData.kind = "ring";
@@ -112,9 +112,9 @@ function buildDumbbell(root) {
 
 function buildMark(root) {
   [
-    metal(0xd6ff3f, 0.22, 0.62, 0x738418, 0.5),
+    metal(0xff4f1f, 0.22, 0.62, 0x7a1e06, 0.5),
     metal(0xe6ebf2, 0.15, 1),
-    metal(0xff4d1c, 0.3, 0.72, 0x7a240e, 0.4),
+    metal(0x1b5956, 0.3, 0.72, 0x0b2a28, 0.4),
   ].forEach((material, index) => {
     const ring = new THREE.Mesh(new THREE.TorusGeometry(1.2, 0.105, 28, 96), material);
     ring.rotation.x = Math.PI / 2.5;
@@ -126,7 +126,7 @@ function buildMark(root) {
 function buildKettlebell(root) {
   const iron = metal(0x17181c, 0.3, 0.92);
   const steel = metal(0xd5dbe3, 0.18, 1);
-  const lime = metal(0xd6ff3f, 0.25, 0.5, 0x6a7c16, 0.4);
+  const accent = metal(0xff4f1f, 0.25, 0.5, 0x7a1e06, 0.4);
 
   const body = new THREE.Mesh(new THREE.SphereGeometry(0.96, 64, 48), iron);
   body.scale.set(1.06, 0.9, 1.06);
@@ -137,7 +137,7 @@ function buildKettlebell(root) {
   base.position.y = -0.74;
   root.add(base);
 
-  const band = new THREE.Mesh(new THREE.TorusGeometry(0.68, 0.022, 12, 64), lime);
+  const band = new THREE.Mesh(new THREE.TorusGeometry(0.68, 0.022, 12, 64), accent);
   band.rotation.x = Math.PI / 2;
   band.position.y = -0.18;
   root.add(band);
@@ -165,7 +165,7 @@ function applyLoad(root, scale) {
 function addFloor(scene, y) {
   const floor = new THREE.Mesh(
     new THREE.CircleGeometry(2.35, 64),
-    new THREE.MeshStandardMaterial({ color: 0x101114, metalness: 0.72, roughness: 0.38 }),
+    new THREE.MeshStandardMaterial({ color: 0x1c1915, metalness: 0.72, roughness: 0.38 }),
   );
   floor.rotation.x = -Math.PI / 2;
   floor.position.y = y;
@@ -203,10 +203,10 @@ export function createScene(canvas, kind) {
   const key = new THREE.DirectionalLight(0xfff4e5, 2.6);
   key.position.set(4.5, 6, 5);
   scene.add(key);
-  const rim = new THREE.DirectionalLight(0xd6ff3f, 2.4);
+  const rim = new THREE.DirectionalLight(0xff7a4f, 2.4);
   rim.position.set(-6, 2.2, -3);
   scene.add(rim);
-  const heat = new THREE.PointLight(0xff4d1c, 12, 14);
+  const heat = new THREE.PointLight(0x2fa39a, 10, 14);
   heat.position.set(1.6, -1.2, 3.2);
   scene.add(heat);
 

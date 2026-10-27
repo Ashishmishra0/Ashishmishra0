@@ -25,7 +25,7 @@ const plans = [
     per: "/month",
     note: { monthly: "Billed monthly. Cancel with 30 days’ notice.", annual: "Billed annually at $984." },
     perks: ["Unlimited floor and classes", "Intro assessment included", "One guest pass each month", "Quiet bay during Reset"],
-    cta: ["Start as a member", "btn-lime"],
+    cta: ["Start as a member", "btn-primary"],
   },
   {
     id: "elite",

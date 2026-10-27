@@ -63,7 +63,7 @@ export default function ExerciseDetail() {
           <p className="kicker">Exercise library</p>
           <h1>That lift is not on the board.</h1>
           <p className="copy lede">We could not find an exercise with that name.</p>
-          <Link className="btn btn-lime" to="/exercises" style={{ marginTop: "1.2rem" }}>Back to the library</Link>
+          <Link className="btn btn-primary" to="/exercises" style={{ marginTop: "1.2rem" }}>Back to the library</Link>
         </div>
       </section>
     );
@@ -156,7 +156,7 @@ export default function ExerciseDetail() {
               <p className="copy">
                 Want this lift checked? Book an intro and a coach will set your starting load and watch the first sets.
               </p>
-              <Link className="btn btn-lime" to="/contact">Book an intro</Link>
+              <Link className="btn btn-primary" to="/contact">Book an intro</Link>
             </div>
           </div>
         </div>

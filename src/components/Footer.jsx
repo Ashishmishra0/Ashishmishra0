@@ -37,7 +37,7 @@ export default function Footer() {
           <h2>Desk</h2>
           <p><a href="mailto:hello@annifitness.example">hello@annifitness.example</a></p>
           <p style={{ margin: "0.8rem 0 1rem" }}>Intro sessions are booked from the desk, not at the turnstile.</p>
-          <Link className="btn btn-lime" to="/contact">Book an intro</Link>
+          <Link className="btn btn-primary" to="/contact">Book an intro</Link>
         </div>
       </div>
       <div className="wrap footer-base">

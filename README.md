@@ -48,7 +48,8 @@ index.html              Vite entry
 src/main.jsx            Mounts the app
 src/App.jsx             Routes, header, footer
 src/pages/              One component per page
-src/components/         Header, Footer, Scene, Stat, TiltCard, CtaBand, Logo
+src/components/         Header, Footer, Scene, Stat, TiltCard, CtaBand, Logo, ExerciseCard
+src/data/exercises.js   Free Exercise DB loader, muscle groups, image URLs
 src/three/createScene.js  Three.js scenes (barbell, mark, kettlebell)
 src/hooks.js            Title, reveal-on-scroll, count-up
 src/styles.css          All styling

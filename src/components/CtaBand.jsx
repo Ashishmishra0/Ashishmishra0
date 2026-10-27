@@ -8,7 +8,7 @@ export default function CtaBand({ kicker, title, to = "/contact", label = "Book 
           <p className="kicker">{kicker}</p>
           <h2>{title}</h2>
         </div>
-        <Link className="btn btn-lime" to={to}>{label}</Link>
+        <Link className="btn btn-primary" to={to}>{label}</Link>
       </div>
     </section>
   );

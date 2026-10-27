@@ -86,7 +86,7 @@ export default function Programs() {
             <h1>Six lanes. One standard.</h1>
             <p className="copy lede">Every class has a coach, a clock, and a way to scale. Mix the week or stay in one lane until the block is done.</p>
             <div className="hero-actions" style={{ marginTop: "1.3rem" }}>
-              <Link className="btn btn-lime" to="/schedule">This week’s board</Link>
+              <Link className="btn btn-primary" to="/schedule">This week’s board</Link>
               <Link className="btn btn-ghost" to="/membership">Membership</Link>
             </div>
           </div>

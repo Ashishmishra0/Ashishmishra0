@@ -99,7 +99,7 @@ export default function Contact() {
                 <textarea id="note" name="note" value={values.note} onChange={update("note")} placeholder="Days you can train, injuries we should know about, or the lift you want watched."></textarea>,
               )}
             </div>
-            <button className="btn btn-lime" type="submit" style={{ marginTop: "0.4rem" }}>Send to the desk</button>
+            <button className="btn btn-primary" type="submit" style={{ marginTop: "0.4rem" }}>Send to the desk</button>
             {success && (
               <p id="form-success" className="form-success" role="status">{success}</p>
             )}
