@@ -1,24 +1,20 @@
-const SCENE_URL = "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js";
+import * as THREE from "three";
 
 const CONFIG = {
-  dumbbell: { fov: 30, cam: [0.35, 0.5, 6.7], look: [0, 0, 0], floor: -1.22, spin: 0.0045, tilt: 0.16 },
-  mark: { fov: 34, cam: [0.2, 0.35, 5.1], look: [0, 0, 0], floor: -1.5, spin: 0.006, tilt: 0.28 },
-  kettlebell: { fov: 32, cam: [0.85, 0.48, 4.7], look: [0, 0.02, 0], floor: -1.48, spin: 0.0035, tilt: 0.1 },
+  dumbbell: { fov: 30, cam: [0.35, 0.5, 6.7], look: [0, 0, 0], floor: -1.22, spin: 0.0045, tilt: 0.16, startY: 0.75 },
+  mark: { fov: 34, cam: [0.2, 0.35, 5.1], look: [0, 0, 0], floor: -1.5, spin: 0.006, tilt: 0.28, startY: 0.75 },
+  kettlebell: { fov: 32, cam: [0.85, 0.48, 4.7], look: [0, 0.02, 0], floor: -1.48, spin: 0.0035, tilt: 0.1, startY: -0.55 },
 };
+
+const LOADS = { light: 0.72, standard: 1, heavy: 1.22 };
 
 let shadowMap;
 
-function metal(THREE, color, roughness, metalness, emissive = 0x000000, emissiveIntensity = 0) {
-  return new THREE.MeshStandardMaterial({
-    color,
-    roughness,
-    metalness,
-    emissive,
-    emissiveIntensity,
-  });
+function metal(color, roughness, metalness, emissive = 0x000000, emissiveIntensity = 0) {
+  return new THREE.MeshStandardMaterial({ color, roughness, metalness, emissive, emissiveIntensity });
 }
 
-function shadowTexture(THREE) {
+function shadowTexture() {
   if (shadowMap) return shadowMap;
   const canvas = document.createElement("canvas");
   canvas.width = 128;
@@ -33,18 +29,17 @@ function shadowTexture(THREE) {
   return shadowMap;
 }
 
-function studioEnvironment(THREE, renderer) {
+function studioEnvironment(renderer) {
   const pmrem = new THREE.PMREMGenerator(renderer);
   const room = new THREE.Scene();
   room.background = new THREE.Color(0x14161a);
   const glow = new THREE.SphereGeometry(0.6, 16, 16);
-  const lights = [
+  [
     [0xfff7ea, 6, 4, 4],
     [0xd6ff3f, -6, 2, -3],
     [0xff4d1c, 3, -3, 5],
     [0x9eb6ff, -3, 5, -6],
-  ];
-  lights.forEach(([color, x, y, z]) => {
+  ].forEach(([color, x, y, z]) => {
     const bulb = new THREE.Mesh(glow, new THREE.MeshBasicMaterial({ color }));
     bulb.position.set(x, y, z);
     room.add(bulb);
@@ -54,11 +49,11 @@ function studioEnvironment(THREE, renderer) {
   return texture;
 }
 
-function buildDumbbell(THREE, root) {
-  const iron = metal(THREE, 0x16171b, 0.32, 0.94);
-  const steel = metal(THREE, 0xd7dde6, 0.16, 1);
-  const gripMat = metal(THREE, 0x2c2e33, 0.75, 0.28);
-  const lime = metal(THREE, 0xd6ff3f, 0.28, 0.45, 0x6d8018, 0.45);
+function buildDumbbell(root) {
+  const iron = metal(0x16171b, 0.32, 0.94);
+  const steel = metal(0xd7dde6, 0.16, 1);
+  const gripMat = metal(0x2c2e33, 0.75, 0.28);
+  const lime = metal(0xd6ff3f, 0.28, 0.45, 0x6d8018, 0.45);
   const plates = [];
 
   const bar = new THREE.Mesh(new THREE.CylinderGeometry(0.072, 0.072, 3.35, 40), steel);
@@ -89,10 +84,7 @@ function buildDumbbell(THREE, root) {
     root.add(collar);
 
     specs.forEach((spec) => {
-      const plate = new THREE.Mesh(
-        new THREE.CylinderGeometry(spec.radius, spec.radius, spec.thickness, 64),
-        iron,
-      );
+      const plate = new THREE.Mesh(new THREE.CylinderGeometry(spec.radius, spec.radius, spec.thickness, 64), iron);
       plate.rotation.z = Math.PI / 2;
       plate.position.x = side * spec.x;
       plate.userData.kind = "plate";
@@ -106,10 +98,7 @@ function buildDumbbell(THREE, root) {
       root.add(edge);
       plates.push(edge);
 
-      const hub = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.12, 0.12, spec.thickness + 0.03, 24),
-        steel,
-      );
+      const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, spec.thickness + 0.03, 24), steel);
       hub.rotation.z = Math.PI / 2;
       hub.position.x = side * spec.x;
       hub.userData.kind = "plate";
@@ -121,13 +110,12 @@ function buildDumbbell(THREE, root) {
   root.userData.plates = plates;
 }
 
-function buildMark(THREE, root) {
-  const materials = [
-    metal(THREE, 0xd6ff3f, 0.22, 0.62, 0x738418, 0.5),
-    metal(THREE, 0xe6ebf2, 0.15, 1),
-    metal(THREE, 0xff4d1c, 0.3, 0.72, 0x7a240e, 0.4),
-  ];
-  materials.forEach((material, index) => {
+function buildMark(root) {
+  [
+    metal(0xd6ff3f, 0.22, 0.62, 0x738418, 0.5),
+    metal(0xe6ebf2, 0.15, 1),
+    metal(0xff4d1c, 0.3, 0.72, 0x7a240e, 0.4),
+  ].forEach((material, index) => {
     const ring = new THREE.Mesh(new THREE.TorusGeometry(1.2, 0.105, 28, 96), material);
     ring.rotation.x = Math.PI / 2.5;
     ring.rotation.y = (index * Math.PI) / 3;
@@ -135,10 +123,10 @@ function buildMark(THREE, root) {
   });
 }
 
-function buildKettlebell(THREE, root) {
-  const iron = metal(THREE, 0x17181c, 0.3, 0.92);
-  const steel = metal(THREE, 0xd5dbe3, 0.18, 1);
-  const lime = metal(THREE, 0xd6ff3f, 0.25, 0.5, 0x6a7c16, 0.4);
+function buildKettlebell(root) {
+  const iron = metal(0x17181c, 0.3, 0.92);
+  const steel = metal(0xd5dbe3, 0.18, 1);
+  const lime = metal(0xd6ff3f, 0.25, 0.5, 0x6a7c16, 0.4);
 
   const body = new THREE.Mesh(new THREE.SphereGeometry(0.96, 64, 48), iron);
   body.scale.set(1.06, 0.9, 1.06);
@@ -165,6 +153,8 @@ function buildKettlebell(THREE, root) {
   });
 }
 
+const BUILDERS = { dumbbell: buildDumbbell, mark: buildMark, kettlebell: buildKettlebell };
+
 function applyLoad(root, scale) {
   root.userData.plates?.forEach((mesh) => {
     if (mesh.userData.kind === "plate") mesh.scale.set(scale, 1, scale);
@@ -172,7 +162,7 @@ function applyLoad(root, scale) {
   });
 }
 
-function addFloor(THREE, scene, y) {
+function addFloor(scene, y) {
   const floor = new THREE.Mesh(
     new THREE.CircleGeometry(2.35, 64),
     new THREE.MeshStandardMaterial({ color: 0x101114, metalness: 0.72, roughness: 0.38 }),
@@ -183,18 +173,17 @@ function addFloor(THREE, scene, y) {
 
   const shadow = new THREE.Mesh(
     new THREE.CircleGeometry(1.45, 40),
-    new THREE.MeshBasicMaterial({ map: shadowTexture(THREE), transparent: true, depthWrite: false }),
+    new THREE.MeshBasicMaterial({ map: shadowTexture(), transparent: true, depthWrite: false }),
   );
   shadow.rotation.x = -Math.PI / 2;
   shadow.position.y = y + 0.015;
   scene.add(shadow);
 }
 
-function mount(THREE, canvas) {
-  const kind = canvas.dataset.scene;
+export function createScene(canvas, kind) {
   const config = CONFIG[kind];
-  const builder = { dumbbell: buildDumbbell, mark: buildMark, kettlebell: buildKettlebell }[kind];
-  if (!config || !builder) return;
+  const builder = BUILDERS[kind];
+  if (!config || !builder) throw new Error(`Unknown scene: ${kind}`);
 
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
@@ -204,7 +193,7 @@ function mount(THREE, canvas) {
   renderer.toneMappingExposure = 1.18;
 
   const scene = new THREE.Scene();
-  scene.environment = studioEnvironment(THREE, renderer);
+  scene.environment = studioEnvironment(renderer);
 
   const camera = new THREE.PerspectiveCamera(config.fov, 1, 0.1, 50);
   camera.position.set(...config.cam);
@@ -221,49 +210,30 @@ function mount(THREE, canvas) {
   heat.position.set(1.6, -1.2, 3.2);
   scene.add(heat);
 
-  addFloor(THREE, scene, config.floor);
+  addFloor(scene, config.floor);
 
   const root = new THREE.Group();
   root.rotation.order = "YXZ";
   scene.add(root);
-  builder(THREE, root);
+  builder(root);
 
-  let rotX = config.tilt;
-  let rotY = kind === "kettlebell" ? -0.55 : 0.75;
-  let velX = 0;
-  let velY = 0;
-  let dragging = false;
-  let hoverX = 0;
-  let hoverY = 0;
-  let lastX = 0;
-  let lastY = 0;
-  let load = 1;
-  let loadTarget = 1;
-  let swing = 0;
-  let running = true;
+  const state = {
+    rotX: config.tilt,
+    rotY: config.startY,
+    velX: 0,
+    velY: 0,
+    dragging: false,
+    hoverX: 0,
+    hoverY: 0,
+    lastX: 0,
+    lastY: 0,
+    load: 1,
+    loadTarget: 1,
+    swing: 0,
+    running: true,
+  };
 
-  const stage = canvas.closest(".stage");
-  const block = canvas.closest(".stage-block");
-  const status = document.querySelector("#load-status");
-  const labels = { light: "Light plates on the bar.", standard: "Standard plates on the bar.", heavy: "Heavy plates on the bar." };
-
-  block?.querySelectorAll("[data-load]").forEach((button) => {
-    button.addEventListener("click", () => {
-      loadTarget = { light: 0.72, standard: 1, heavy: 1.22 }[button.dataset.load] ?? 1;
-      block.querySelectorAll("[data-load]").forEach((item) => {
-        const on = item === button;
-        item.classList.toggle("is-active", on);
-        item.setAttribute("aria-pressed", String(on));
-      });
-      if (status) status.textContent = labels[button.dataset.load] || "Plates updated.";
-    });
-  });
-
-  block?.querySelector("[data-swing]")?.addEventListener("click", () => {
-    swing = 1;
-  });
-
-  function resize() {
+  const resize = () => {
     const parent = canvas.parentElement;
     const width = parent.clientWidth || 1;
     const height = parent.clientHeight || 1;
@@ -271,114 +241,120 @@ function mount(THREE, canvas) {
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
-  }
-
+  };
   resize();
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(canvas.parentElement);
 
-  canvas.addEventListener("pointerdown", (event) => {
-    dragging = true;
-    lastX = event.clientX;
-    lastY = event.clientY;
+  const onDown = (event) => {
+    state.dragging = true;
+    state.lastX = event.clientX;
+    state.lastY = event.clientY;
     canvas.setPointerCapture(event.pointerId);
-  });
-  canvas.addEventListener("pointermove", (event) => {
+  };
+  const onMove = (event) => {
     const rect = canvas.getBoundingClientRect();
-    if (!dragging) {
-      hoverX = (event.clientX - rect.left) / rect.width - 0.5;
-      hoverY = (event.clientY - rect.top) / rect.height - 0.5;
+    if (!state.dragging) {
+      state.hoverX = (event.clientX - rect.left) / rect.width - 0.5;
+      state.hoverY = (event.clientY - rect.top) / rect.height - 0.5;
       return;
     }
-    const dx = event.clientX - lastX;
-    const dy = event.clientY - lastY;
-    lastX = event.clientX;
-    lastY = event.clientY;
-    velY = dx * 0.01;
-    velX = dy * 0.01;
-    rotY += velY;
-    rotX += velX;
-  });
-  const release = () => {
-    dragging = false;
+    const dx = event.clientX - state.lastX;
+    const dy = event.clientY - state.lastY;
+    state.lastX = event.clientX;
+    state.lastY = event.clientY;
+    state.velY = dx * 0.01;
+    state.velX = dy * 0.01;
+    state.rotY += state.velY;
+    state.rotX += state.velX;
   };
-  canvas.addEventListener("pointerup", release);
-  canvas.addEventListener("pointercancel", release);
-  canvas.addEventListener("pointerleave", () => {
-    if (!dragging) {
-      hoverX = 0;
-      hoverY = 0;
+  const release = () => {
+    state.dragging = false;
+  };
+  const onLeave = () => {
+    if (!state.dragging) {
+      state.hoverX = 0;
+      state.hoverY = 0;
     }
-  });
-  canvas.addEventListener("keydown", (event) => {
+  };
+  const onKey = (event) => {
     const step = event.shiftKey ? 0.28 : 0.14;
-    if (event.key === "ArrowLeft") rotY -= step;
-    else if (event.key === "ArrowRight") rotY += step;
-    else if (event.key === "ArrowUp") rotX -= step;
-    else if (event.key === "ArrowDown") rotX += step;
+    if (event.key === "ArrowLeft") state.rotY -= step;
+    else if (event.key === "ArrowRight") state.rotY += step;
+    else if (event.key === "ArrowUp") state.rotX -= step;
+    else if (event.key === "ArrowDown") state.rotX += step;
     else return;
     event.preventDefault();
-  });
+  };
+
+  canvas.addEventListener("pointerdown", onDown);
+  canvas.addEventListener("pointermove", onMove);
+  canvas.addEventListener("pointerup", release);
+  canvas.addEventListener("pointercancel", release);
+  canvas.addEventListener("pointerleave", onLeave);
+  canvas.addEventListener("keydown", onKey);
 
   const visibility = new IntersectionObserver(([entry]) => {
-    running = entry.isIntersecting;
+    state.running = entry.isIntersecting;
   });
   visibility.observe(canvas);
 
   const clock = new THREE.Clock();
-  function frame() {
-    requestAnimationFrame(frame);
-    if (!running || document.hidden) return;
+  let frameId = 0;
+  const frame = () => {
+    frameId = requestAnimationFrame(frame);
+    if (!state.running || document.hidden) return;
     const elapsed = clock.getElapsedTime();
-    if (!dragging) {
-      velX *= 0.92;
-      velY *= 0.92;
-      rotY += (reduce ? 0 : config.spin) + velY;
-      rotX += velX;
-      rotX += (config.tilt - rotX) * 0.02;
+    if (!state.dragging) {
+      state.velX *= 0.92;
+      state.velY *= 0.92;
+      state.rotY += (reduce ? 0 : config.spin) + state.velY;
+      state.rotX += state.velX;
+      state.rotX += (config.tilt - state.rotX) * 0.02;
     }
-    const tiltLimit = Math.max(-0.75, Math.min(0.75, rotX + (dragging ? 0 : hoverY * 0.28)));
-    root.rotation.y = rotY + (dragging ? 0 : hoverX * 0.4);
-    root.rotation.x = tiltLimit;
-    if (swing > 0.01) {
-      root.rotation.z = Math.sin(elapsed * 9) * swing * 0.85;
-      swing *= 0.965;
+    const tilt = Math.max(-0.75, Math.min(0.75, state.rotX + (state.dragging ? 0 : state.hoverY * 0.28)));
+    root.rotation.y = state.rotY + (state.dragging ? 0 : state.hoverX * 0.4);
+    root.rotation.x = tilt;
+    if (state.swing > 0.01) {
+      root.rotation.z = Math.sin(elapsed * 9) * state.swing * 0.85;
+      state.swing *= 0.965;
     } else {
       root.rotation.z = 0;
-      swing = 0;
+      state.swing = 0;
     }
     if (!reduce) root.position.y = Math.sin(elapsed * 0.85) * 0.045;
     if (root.userData.plates) {
-      load += (loadTarget - load) * 0.08;
-      applyLoad(root, load);
+      state.load += (state.loadTarget - state.load) * 0.08;
+      applyLoad(root, state.load);
     }
     renderer.render(scene, camera);
-  }
-
-  stage?.classList.add("is-live");
+  };
   frame();
+
+  return {
+    setLoad(name) {
+      state.loadTarget = LOADS[name] ?? 1;
+    },
+    swing() {
+      state.swing = 1;
+    },
+    dispose() {
+      cancelAnimationFrame(frameId);
+      resizeObserver.disconnect();
+      visibility.disconnect();
+      canvas.removeEventListener("pointerdown", onDown);
+      canvas.removeEventListener("pointermove", onMove);
+      canvas.removeEventListener("pointerup", release);
+      canvas.removeEventListener("pointercancel", release);
+      canvas.removeEventListener("pointerleave", onLeave);
+      canvas.removeEventListener("keydown", onKey);
+      scene.traverse((object) => {
+        object.geometry?.dispose();
+        if (Array.isArray(object.material)) object.material.forEach((m) => m.dispose());
+        else object.material?.dispose();
+      });
+      scene.environment?.dispose();
+      renderer.dispose();
+    },
+  };
 }
-
-async function boot() {
-  let THREE;
-  try {
-    THREE = await import(SCENE_URL);
-  } catch (error) {
-    document.querySelectorAll("canvas[data-scene]").forEach((canvas) => {
-      canvas.setAttribute("aria-hidden", "true");
-      canvas.removeAttribute("tabindex");
-    });
-    return;
-  }
-
-  document.querySelectorAll("canvas[data-scene]").forEach((canvas) => {
-    try {
-      mount(THREE, canvas);
-    } catch (error) {
-      canvas.setAttribute("aria-hidden", "true");
-      canvas.removeAttribute("tabindex");
-    }
-  });
-}
-
-boot();
