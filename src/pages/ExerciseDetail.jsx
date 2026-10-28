@@ -1,26 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import ExerciseCard from "../components/ExerciseCard.jsx";
-import { SOURCE, groupLabel, imageUrl, titleCase, useExercises } from "../data/exercises.js";
-import { reduceMotion, useTitle } from "../hooks.js";
+import { SOURCE, groupLabel, titleCase, useExercises } from "../data/exercises.js";
+import { useTitle } from "../hooks.js";
 
 export default function ExerciseDetail() {
   const { id } = useParams();
   const { data, error } = useExercises();
   const exercise = data?.find((item) => item.id === id);
-  const [frame, setFrame] = useState(0);
-  const [playing, setPlaying] = useState(() => !reduceMotion());
+  const [clipFailed, setClipFailed] = useState(false);
 
   useTitle(exercise ? `${exercise.name} — Anni Fitness` : "Exercise — Anni Fitness");
 
   useEffect(() => {
-    if (!playing || !exercise || exercise.images.length < 2) return undefined;
-    const timer = setInterval(() => setFrame((value) => (value + 1) % 2), 1000);
-    return () => clearInterval(timer);
-  }, [playing, exercise]);
-
-  useEffect(() => {
-    setFrame(0);
+    setClipFailed(false);
     window.scrollTo({ top: 0, behavior: "instant" });
   }, [id]);
 
@@ -69,13 +62,10 @@ export default function ExerciseDetail() {
     );
   }
 
-  const [start, finish] = exercise.images;
   const facts = [
-    ["Level", titleCase(exercise.level)],
+    ["Body", groupLabel(exercise.group)],
     ["Equipment", titleCase(exercise.equipment || "None")],
-    ["Type", titleCase(exercise.category)],
-    ["Movement", exercise.mechanic ? titleCase(exercise.mechanic) : "—"],
-    ["Force", exercise.force ? titleCase(exercise.force) : "—"],
+    ["Target", titleCase(exercise.primaryMuscles[0] || "—")],
   ];
 
   return (
@@ -90,7 +80,7 @@ export default function ExerciseDetail() {
           </nav>
           <h1>{exercise.name}</h1>
           <p className="ex-targets">
-            <span className={`pill ex-level ex-level-${exercise.level}`}>{exercise.level}</span>
+            <span className="pill ex-level">Full clip</span>
             {exercise.primaryMuscles.map((muscle) => (
               <Link key={muscle} className="pill pill-muscle" to={`/exercises?q=${encodeURIComponent(muscle)}`}>{titleCase(muscle)}</Link>
             ))}
@@ -102,23 +92,14 @@ export default function ExerciseDetail() {
         <div className="wrap ex-detail">
           <div className="ex-viewer">
             <div className="ex-stage">
-              <img src={imageUrl(start)} alt={`${exercise.name}, starting position`} className={frame === 0 ? "is-shown" : ""} />
-              {finish && <img src={imageUrl(finish)} alt={`${exercise.name}, finishing position`} className={frame === 1 ? "is-shown" : ""} />}
-              <span className="ex-frame-label">{frame === 0 ? "Start" : "Finish"}</span>
+              {clipFailed ? (
+                <p className="ex-missing">This clip could not be loaded. The steps are still below.</p>
+              ) : (
+                <img src={exercise.gif} alt={`${exercise.name}, full movement`} className="is-shown" onError={() => setClipFailed(true)} />
+              )}
+              <span className="ex-frame-label">Full movement</span>
             </div>
-            {finish && (
-              <div className="ex-controls" role="group" aria-label="Exercise photos">
-                <button type="button" className={frame === 0 ? "is-active" : ""} aria-pressed={frame === 0} onClick={() => { setPlaying(false); setFrame(0); }}>
-                  Start
-                </button>
-                <button type="button" className={frame === 1 ? "is-active" : ""} aria-pressed={frame === 1} onClick={() => { setPlaying(false); setFrame(1); }}>
-                  Finish
-                </button>
-                <button type="button" className={playing ? "is-active" : ""} aria-pressed={playing} onClick={() => setPlaying((value) => !value)}>
-                  {playing ? "Pause" : "Play"}
-                </button>
-              </div>
-            )}
+            <p className="ex-clip-note">The whole rep, looping. Not a start and finish still.</p>
             <dl className="ex-facts">
               {facts.map(([label, value]) => (
                 <div key={label}>
@@ -178,8 +159,8 @@ export default function ExerciseDetail() {
               ))}
             </div>
             <p className="credit">
-              Exercise data and photos from{" "}
-              <a href={SOURCE.url} target="_blank" rel="noreferrer">{SOURCE.name}</a>, an open public-domain dataset.
+              Full-movement clips from{" "}
+              <a href={SOURCE.url} target="_blank" rel="noreferrer">{SOURCE.name}</a> by AscendAPI. Free dataset, non-commercial use.
             </p>
           </div>
         </section>

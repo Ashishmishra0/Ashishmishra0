@@ -2,7 +2,7 @@ import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import ExerciseCard from "../components/ExerciseCard.jsx";
 import CtaBand from "../components/CtaBand.jsx";
-import { EQUIPMENT, GROUPS, LEVELS, SOURCE, titleCase, useExercises } from "../data/exercises.js";
+import { EQUIPMENT, GROUPS, SOURCE, titleCase, useExercises } from "../data/exercises.js";
 import { useTitle } from "../hooks.js";
 
 const PAGE = 24;
@@ -15,7 +15,6 @@ export default function Exercises() {
 
   const group = params.get("group") || "all";
   const equipment = params.get("equipment") || "all";
-  const level = params.get("level") || "all";
   const query = params.get("q") || "";
   const deferredQuery = useDeferredValue(query);
 
@@ -28,7 +27,7 @@ export default function Exercises() {
 
   useEffect(() => {
     setLimit(PAGE);
-  }, [group, equipment, level, deferredQuery]);
+  }, [group, equipment, deferredQuery]);
 
   const groupCounts = useMemo(() => {
     const counts = {};
@@ -44,7 +43,6 @@ export default function Exercises() {
     return data.filter((exercise) => {
       if (group !== "all" && exercise.group !== group) return false;
       if (equipment !== "all" && (exercise.equipment || "other") !== equipment) return false;
-      if (level !== "all" && exercise.level !== level) return false;
       if (!needle) return true;
       return (
         exercise.name.toLowerCase().includes(needle) ||
@@ -52,7 +50,7 @@ export default function Exercises() {
         exercise.secondaryMuscles.some((muscle) => muscle.includes(needle))
       );
     });
-  }, [data, group, equipment, level, deferredQuery]);
+  }, [data, group, equipment, deferredQuery]);
 
   const shown = results.slice(0, limit);
   const activeGroup = GROUPS.find((item) => item.id === group);
@@ -65,8 +63,8 @@ export default function Exercises() {
           <p className="kicker">Exercise library</p>
           <h1>{activeGroup ? `${activeGroup.label} exercises.` : "Every lift, by muscle."}</h1>
           <p className="copy lede">
-            {data ? `${data.length} exercises` : "Hundreds of exercises"} with start and finish photos, target muscles, equipment, and step-by-step
-            instructions. Pick a muscle group, then narrow by equipment or level.
+            {data ? `${data.length} exercises` : "Hundreds of exercises"} with a full-movement clip, target muscles, equipment, and step-by-step
+            instructions. Pick a muscle group, then narrow by equipment.
           </p>
         </div>
       </section>
@@ -111,15 +109,6 @@ export default function Exercises() {
               ))}
             </select>
           </label>
-          <label className="select-field">
-            <span>Level</span>
-            <select value={level} onChange={(event) => setFilter("level", event.target.value)}>
-              <option value="all">Any level</option>
-              {LEVELS.map((item) => (
-                <option key={item} value={item}>{titleCase(item)}</option>
-              ))}
-            </select>
-          </label>
           <p className="result-count" aria-live="polite">
             {data ? `${results.length} ${results.length === 1 ? "exercise" : "exercises"}` : error ? "Library unavailable" : "Loading library…"}
           </p>
@@ -158,8 +147,8 @@ export default function Exercises() {
             </>
           )}
           <p className="credit">
-            Exercise data and photos from{" "}
-            <a href={SOURCE.url} target="_blank" rel="noreferrer">{SOURCE.name}</a>, an open public-domain dataset.
+            Full-movement clips from{" "}
+            <a href={SOURCE.url} target="_blank" rel="noreferrer">{SOURCE.name}</a> by AscendAPI. Free dataset, non-commercial use.
           </p>
         </div>
       </section>

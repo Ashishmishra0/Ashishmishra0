@@ -1,47 +1,57 @@
 import { useEffect, useState } from "react";
 
-// Free Exercise DB (public domain): https://github.com/yuhonas/free-exercise-db
-const BASE = "https://cdn.jsdelivr.net/gh/yuhonas/free-exercise-db@main";
-
+// Free ExerciseDB dataset (AscendAPI): full-movement GIFs, non-commercial use, attribution required.
+// https://oss.exercisedb.dev/docs
 export const SOURCE = {
-  name: "Free Exercise DB",
-  url: "https://github.com/yuhonas/free-exercise-db",
+  name: "ExerciseDB",
+  url: "https://oss.exercisedb.dev/docs",
 };
 
 export const GROUPS = [
-  { id: "chest", label: "Chest", muscles: ["chest"] },
-  { id: "back", label: "Back", muscles: ["lats", "middle back", "lower back", "traps"] },
-  { id: "shoulders", label: "Shoulders", muscles: ["shoulders"] },
+  { id: "chest", label: "Chest", muscles: ["pectorals"] },
+  { id: "back", label: "Back", muscles: ["lats", "upper back", "traps"] },
+  { id: "shoulders", label: "Shoulders", muscles: ["delts"] },
   { id: "arms", label: "Arms", muscles: ["biceps", "triceps", "forearms"] },
-  { id: "legs", label: "Legs", muscles: ["quadriceps", "hamstrings", "glutes", "calves", "adductors", "abductors"] },
-  { id: "core", label: "Core", muscles: ["abdominals"] },
+  { id: "legs", label: "Legs", muscles: ["quads", "hamstrings", "glutes", "calves"] },
+  { id: "core", label: "Core", muscles: ["abs"] },
+  { id: "cardio", label: "Cardio", muscles: ["cardiovascular system"] },
   { id: "neck", label: "Neck", muscles: ["neck"] },
 ];
 
-export const LEVELS = ["beginner", "intermediate", "expert"];
-
 export const EQUIPMENT = [
+  "ab wheel",
+  "assisted",
   "barbell",
-  "dumbbell",
-  "kettlebells",
+  "bodyweight",
+  "bosu ball",
   "cable",
-  "machine",
-  "body only",
-  "bands",
+  "dumbbell",
+  "elliptical machine",
+  "EZ bar",
+  "hammer",
+  "kettlebell",
+  "leverage machine",
   "medicine ball",
-  "exercise ball",
-  "e-z curl bar",
-  "foam roll",
-  "other",
+  "olympic barbell",
+  "resistance band",
+  "roller",
+  "rope",
+  "ski ergometer",
+  "sled machine",
+  "smith machine",
+  "stability ball",
+  "stationary bike",
+  "stepmill machine",
+  "suspension trainer",
+  "tennis ball",
+  "tire",
+  "towel",
+  "trap bar",
+  "upper body ergometer",
+  "weighted",
 ];
 
-const muscleToGroup = new Map();
-GROUPS.forEach((group) => group.muscles.forEach((muscle) => muscleToGroup.set(muscle, group.id)));
-
-export const groupOf = (exercise) => muscleToGroup.get(exercise.primaryMuscles[0]) || "other";
 export const groupLabel = (id) => GROUPS.find((group) => group.id === id)?.label || "Other";
-
-export const imageUrl = (path) => `${BASE}/exercises/${path}`;
 
 export const titleCase = (text = "") => text.replace(/\b\w/g, (char) => char.toUpperCase());
 
@@ -49,17 +59,8 @@ let request;
 
 export function loadExercises() {
   if (!request) {
-    request = fetch(`${BASE}/dist/exercises.json`)
-      .then((response) => {
-        if (!response.ok) throw new Error(`Exercise library responded ${response.status}`);
-        return response.json();
-      })
-      .then((list) =>
-        list
-          .filter((exercise) => exercise.images?.length)
-          .map((exercise) => ({ ...exercise, group: groupOf(exercise) }))
-          .sort((a, b) => a.name.localeCompare(b.name)),
-      )
+    request = import("./exercisedb.json")
+      .then((mod) => mod.default)
       .catch((error) => {
         request = null;
         throw error;

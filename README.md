@@ -17,12 +17,10 @@ Home, About, Programs, Exercises, Trainers, Membership, Schedule, Contact.
 
 ## Exercise library
 
-The Exercises pages pull from [Free Exercise DB](https://github.com/yuhonas/free-exercise-db), an open public-domain dataset (Unlicense) of 870+ exercises with start/finish photos, target muscles, equipment, level, and step-by-step instructions. The JSON and images are loaded at runtime from the jsDelivr CDN (`src/data/exercises.js`), so there is nothing to host or key to manage.
+The Exercises pages use the free [ExerciseDB](https://oss.exercisedb.dev/docs) dataset from AscendAPI. Each exercise has a full-movement GIF (the whole rep, looping), target muscles, equipment, and step-by-step instructions. The catalog in `src/data/exercisedb.json` keeps the exercises whose clips are actually online. The clips load from ExerciseDB’s CDN. That free dataset is GIF only (no MP4 files) and is for non-commercial use; the pages credit AscendAPI.
 
-- `/#/exercises` — browse by muscle group (chest, back, shoulders, arms, legs, core), filter by equipment and level, search by name or muscle. Filters live in the URL, so a view can be linked to, e.g. `/#/exercises?group=chest&equipment=barbell`.
-- `/#/exercises/:id` — one exercise: animated start/finish photos, muscles, facts, numbered instructions, and related lifts.
-
-If you would rather not depend on the CDN, copy `dist/exercises.json` and the `exercises/` image folders from that repo into `public/` and point `BASE` in `src/data/exercises.js` at them.
+- `/#/exercises` — browse by muscle group (chest, back, shoulders, arms, legs, core, cardio), filter by equipment, search by name or muscle. Filters live in the URL, so a view can be linked to, e.g. `/#/exercises?group=chest&equipment=barbell`.
+- `/#/exercises/:id` — one exercise: the full movement clip, muscles, facts, numbered instructions, and related lifts.
 
 ## Run it
 
@@ -49,7 +47,8 @@ src/main.jsx            Mounts the app
 src/App.jsx             Routes, header, footer
 src/pages/              One component per page
 src/components/         Header, Footer, Scene, Stat, TiltCard, CtaBand, Logo, Marks, ExerciseCard
-src/data/exercises.js   Free Exercise DB loader, muscle groups, image URLs
+src/data/exercises.js   ExerciseDB loader, muscle groups
+src/data/exercisedb.json  1,500 exercises and full-movement clip URLs
 src/three/createScene.js  Three.js scenes (barbell, mark, kettlebell)
 src/hooks.js            Title, reveal-on-scroll, count-up
 src/styles.css          All styling

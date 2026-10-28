@@ -1,32 +1,23 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { imageUrl, titleCase } from "../data/exercises.js";
+import { titleCase } from "../data/exercises.js";
 
 export default function ExerciseCard({ exercise }) {
-  const [frame, setFrame] = useState(0);
-  const [start, finish = start] = exercise.images;
-
+  const [failed, setFailed] = useState(false);
   return (
-    <Link
-      className="ex-card"
-      to={`/exercises/${exercise.id}`}
-      onPointerEnter={() => setFrame(1)}
-      onPointerLeave={() => setFrame(0)}
-      onFocus={() => setFrame(1)}
-      onBlur={() => setFrame(0)}
-    >
+    <Link className="ex-card" to={`/exercises/${exercise.id}`}>
       <div className="ex-media">
-        <img src={imageUrl(start)} alt="" loading="lazy" decoding="async" className={frame === 0 ? "is-shown" : ""} />
-        <img src={imageUrl(finish)} alt="" loading="lazy" decoding="async" className={frame === 1 ? "is-shown" : ""} />
-        <span className={`pill ex-level ex-level-${exercise.level}`}>{exercise.level}</span>
+        {failed ? (
+          <p className="ex-missing">Clip unavailable</p>
+        ) : (
+          <img src={exercise.gif} alt="" loading="lazy" decoding="async" className="is-shown" onError={() => setFailed(true)} />
+        )}
+        <span className="pill ex-level">Full clip</span>
       </div>
       <div className="ex-body">
         <h3>{exercise.name}</h3>
         <p className="ex-muscles">{exercise.primaryMuscles.map(titleCase).join(", ")}</p>
-        <p className="ex-meta">
-          {titleCase(exercise.equipment || "No equipment")}
-          {exercise.mechanic ? ` · ${titleCase(exercise.mechanic)}` : ""}
-        </p>
+        <p className="ex-meta">{titleCase(exercise.equipment || "No equipment")}</p>
       </div>
     </Link>
   );
